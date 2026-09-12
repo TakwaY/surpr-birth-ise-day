@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#171210" />
+  <title>A Little Birthday Surprise</title>
+
+  <style>
+    :root {
+      --bg: #121112;
+      --charcoal: #1b191b;
+      --charcoal-2: #252225;
+      --silver: #e8d9d2;
+      --white: #fffaf7;
+      --muted: #b6a9a5;
+      --accent: #d9aaa0;
+      --line: rgba(255,235,228,.17);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      min-height: 100svh;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 50% 30%, rgba(217,170,160,.11), transparent 34%),
+        radial-gradient(circle at 80% 85%, rgba(214,157,118,.075), transparent 28%),
+        var(--bg);
+      color: var(--white);
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .screen {
+      min-height: 100svh;
+      width: 100%;
+    }
+
+    /* ---------- Envelope screen ---------- */
+
+    #landing {
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      position: relative;
+      transition: opacity .75s ease, visibility .75s ease;
+    }
+
+    #landing.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .landing-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      width: min(90vw, 430px);
+    }
+
+    .envelope-button {
+      position: relative;
+      width: min(78vw, 330px);
+      aspect-ratio: 1.55 / 1;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      cursor: pointer;
+      perspective: 900px;
+      filter: drop-shadow(0 22px 32px rgba(0,0,0,.55));
+    }
+
+    .envelope {
+      position: absolute;
+      inset: 0;
+      border-radius: 5px;
+      background: linear-gradient(145deg, #302a2d, #171517);
+      border: 1px solid rgba(225,190,162,.18);
+      box-shadow:
+        inset 0 0 0 1px rgba(0,0,0,.4),
+        0 0 0 1px rgba(225,190,162,.035);
+      transform-style: preserve-3d;
+    }
+
+    .envelope::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(34deg, transparent 49.5%, rgba(225,190,162,.13) 50%, transparent 50.6%),
+        linear-gradient(146deg, transparent 49.5%, rgba(225,190,162,.10) 50%, transparent 50.6%);
+      border-radius: inherit;
+      pointer-events: none;
+    }
+
+    .flap {
+      position: absolute;
+      z-index: 3;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 63%;
+      transform-origin: top center;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      background: linear-gradient(145deg, #40383b, #211e20);
+      border-top: 1px solid rgba(225,190,162,.20);
+      transition: transform .9s cubic-bezier(.2,.75,.2,1);
+      backface-visibility: hidden;
+    }
+
+    .seal {
+      color: #d6a17e;
+      position: absolute;
+      z-index: 5;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -15%);
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #3b2922;
+      border: 1px solid rgba(255,255,255,.2);
+      box-shadow: 0 5px 18px rgba(0,0,0,.45);
+      color: var(--amber);
+      font-size: 17px;
+      transition: opacity .35s ease, transform .35s ease;
+    }
+
+    .envelope-button.opening .flap {
+      transform: rotateX(178deg);
+    }
+
+    .envelope-button.opening .seal {
+      color: #d6a17e;
+      opacity: 0;
+      transform: translate(-50%, -15%) scale(.7);
+    }
+
+    .tap-text {
+      color: #d2c0bb;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      animation: breathe 2.2s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: .45; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-2px); }
+    }
+
+    /* ---------- Main screen ---------- */
+
+    #main {
+      position: absolute;
+      inset: 0;
+      min-height: 100svh;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 1s ease .25s, visibility 1s ease .25s;
+      overflow-y: auto;
+    }
+
+    #main.visible {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .main-inner {
+      min-height: 100svh;
+      width: min(100%, 900px);
+      margin: 0 auto;
+      padding:
+        max(56px, env(safe-area-inset-top) + 34px)
+        22px
+        max(70px, env(safe-area-inset-bottom) + 45px);
+      display: grid;
+      align-content: center;
+      gap: 34px;
+    }
+
+    .eyebrow {
+      margin: 0 0 12px;
+      color: #b9a5a0;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10px;
+      letter-spacing: .34em;
+      text-transform: uppercase;
+    }
+
+    .title {
+      margin: 0;
+      color: var(--white);
+      font-size: clamp(38px, 9vw, 72px);
+      font-weight: 400;
+      line-height: .98;
+      letter-spacing: -.035em;
+    }
+
+    .title span {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(240px, 340px);
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .letter {
+      position: relative;
+      padding: clamp(26px, 5vw, 42px);
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(255,235,228,.075), rgba(225,190,162,.035));
+      border-radius: 4px;
+      box-shadow: 0 25px 70px rgba(0,0,0,.25);
+      overflow: hidden;
+    }
+
+    .letter::before {
+      content: "“";
+      position: absolute;
+      top: -15px;
+      left: 16px;
+      color: rgba(255,255,255,.06);
+      font-size: 130px;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .letter p {
+      position: relative;
+      margin: 0 0 18px;
+      color: #e1d8d5;
+      font-size: clamp(16px, 2.5vw, 19px);
+      line-height: 1.75;
+    }
+
+    .letter p:last-child {
+      margin-bottom: 0;
+    }
+
+    .signature {
+      margin-top: 26px !important;
+      color: #e0b99d !important;
+      font-style: italic;
+    }
+
+    .media-placeholder {
+      min-height: 310px;
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background:
+        linear-gradient(rgba(255,235,228,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,235,228,.035) 1px, transparent 1px),
+        #191719;
+      background-size: 22px 22px;
+    }
+
+    .media-placeholder::before {
+      content: "";
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 50%;
+      animation: pulse-ring 4s ease-in-out infinite;
+    }
+
+    .media-placeholder img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity .5s ease;
+    }
+
+    .media-placeholder.has-image img {
+      opacity: 1;
+    }
+
+    .placeholder-copy {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 24px;
+      color: #aa9995;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    @keyframes pulse-ring {
+      0%, 100% { transform: scale(.9); opacity: .3; }
+      50% { transform: scale(1.05); opacity: .75; }
+    }
+
+    .music-toggle {
+      position: fixed;
+      z-index: 20;
+      right: max(18px, env(safe-area-inset-right) + 12px);
+      bottom: max(18px, env(safe-area-inset-bottom) + 12px);
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(225,190,162,.20);
+      border-radius: 50%;
+      background: rgba(38,32,35,.88);
+      color: var(--amber);
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 10px 28px rgba(0,0,0,.35);
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .music-toggle:active {
+      transform: scale(.92);
+    }
+
+    .music-toggle:hover {
+      border-color: rgba(255,255,255,.32);
+    }
+
+    .music-icon {
+      width: 18px;
+      height: 18px;
+      position: relative;
+    }
+
+    .music-icon::before {
+      content: "";
+      position: absolute;
+      width: 3px;
+      height: 14px;
+      right: 3px;
+      top: 1px;
+      border-radius: 2px;
+      background: currentColor;
+      transform: rotate(-8deg);
+    }
+
+    .music-icon::after {
+      content: "";
+      position: absolute;
+      width: 11px;
+      height: 3px;
+      right: 3px;
+      top: 1px;
+      border-radius: 2px;
+      background: currentColor;
+      box-shadow: -6px 10px 0 -1px currentColor;
+    }
+
+    .music-toggle.paused .music-icon::before {
+      width: 0;
+      height: 0;
+      background: transparent;
+      border-top: 9px solid transparent;
+      border-bottom: 9px solid transparent;
+      border-left: 13px solid currentColor;
+      right: 1px;
+      top: 0;
+      transform: none;
+    }
+
+    .music-toggle.paused .music-icon::after {
+      display: none;
+    }
+
+    @media (max-width: 700px) {
+      .main-inner {
+        align-content: start;
+        padding-top: max(74px, env(safe-area-inset-top) + 45px);
+      }
+
+      .content-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .media-placeholder {
+        min-height: 250px;
+        order: -1;
+      }
+
+      .letter {
+        padding: 28px 24px;
+      }
+
+      .title {
+        max-width: 420px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!--
+    Keep these files in the same folder as this index.html:
+      music.mp3
+      animation.gif
+  -->
+
+  <audio id="backgroundMusic" src="piano.mp3" loop preload="auto"></audio>
+
+  <section id="landing" class="screen" aria-label="Birthday surprise">
+    <div class="landing-content">
+      <button
+        id="envelopeButton"
+        class="envelope-button"
+        type="button"
+        aria-label="Open birthday envelope"
+      >
+        <div class="envelope">
+          <div class="flap"></div>
+          <div class="seal">♥</div>
+        </div>
+      </button>
+
+      <div class="tap-text">Tap to open</div>
+    </div>
+  </section>
+
+  <main id="main" aria-hidden="true">
+    <div class="main-inner">
+      <header>
+        <p class="eyebrow">A little note for you</p>
+        <h1 class="title">Happy Birthday, <span>my love.</span></h1>
+      </header>
+
+      <section class="content-grid">
+        <article class="letter">
+          <p>
+            "Dear Youssef, Happy birthday.           
+          </p>
+
+          <p>
+           I wish you all the happiness the world has to offer. 
+           May your life be filled with laughter, health, and happiness. 
+           My life has become infinitely better since you've been a part of it.
+           And wherever this year takes us, I hope we continue to make memories, love, laugh, and watch our dreams come true."
+
+          </p>
+
+          <p class="signature">
+            With all my love, Takwa<br />
+            ♥
+          </p>
+        </article>
+
+        <div id="mediaPlaceholder" class="media-placeholder">
+          <img src="22nd.jpg" alt="Birthday animation" onload="document.getElementById('mediaPlaceholder').classList.add('has-image')" />
+          <div class="placeholder-copy">
+            <br />
+            <span style="opacity:.55;"></span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <button
+    id="musicToggle"
+    class="music-toggle paused"
+    type="button"
+    aria-label="Play music"
+    aria-pressed="false"
+    hidden
+  >
+    <span class="music-icon" aria-hidden="true"></span>
+  </button>
+
+  <script>
+    (() => {
+      const landing = document.getElementById("landing");
+      const main = document.getElementById("main");
+      const envelopeButton = document.getElementById("envelopeButton");
+      const audio = document.getElementById("backgroundMusic");
+      const musicToggle = document.getElementById("musicToggle");
+
+      let opened = false;
+
+      function updateMusicButton() {
+        const playing = !audio.paused;
+        musicToggle.classList.toggle("paused", !playing);
+        musicToggle.setAttribute("aria-pressed", String(playing));
+        musicToggle.setAttribute("aria-label", playing ? "Pause music" : "Play music");
+      }
+
+      function openEnvelope() {
+        if (opened) return;
+        opened = true;
+
+        // The user's tap/click directly initiates playback.
+        audio.play().catch(() => {
+          // If playback is rejected by the browser, the toggle remains available.
+        });
+
+        envelopeButton.classList.add("opening");
+
+        // Let the flap animation breathe before revealing the letter.
+        window.setTimeout(() => {
+          landing.classList.add("hidden");
+          main.classList.add("visible");
+          main.setAttribute("aria-hidden", "false");
+          musicToggle.hidden = false;
+          updateMusicButton();
+        }, 650);
+      }
+
+      envelopeButton.addEventListener("click", openEnvelope);
+
+      musicToggle.addEventListener("click", () => {
+        if (audio.paused) {
+          audio.play().catch(() => {});
+        } else {
+          audio.pause();
+        }
+      });
+
+      audio.addEventListener("play", updateMusicButton);
+      audio.addEventListener("pause", updateMusicButton);
+      audio.addEventListener("ended", updateMusicButton);
+    })();
+  </script>
+</body>
+</html>
