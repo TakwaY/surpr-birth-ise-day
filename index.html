@@ -56,7 +56,7 @@
       place-items: center;
       padding: 24px;
       position: relative;
-      transition: opacity .75s ease, visibility .75s ease;
+      transition: opacity .65s ease, visibility .65s ease;
     }
 
     #landing.hidden {
@@ -138,7 +138,6 @@
       background: #3b2922;
       border: 1px solid rgba(255,255,255,.2);
       box-shadow: 0 5px 18px rgba(0,0,0,.45);
-      color: var(--amber);
       font-size: 17px;
       transition: opacity .35s ease, transform .35s ease;
     }
@@ -167,11 +166,124 @@
       50% { opacity: 1; transform: translateY(-2px); }
     }
 
+    /* ---------- Celebration screen (balloons + 22) ---------- */
+
+    #celebration {
+      position: fixed;
+      inset: 0;
+      z-index: 15;
+      overflow: hidden;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .9s ease, visibility .9s ease;
+    }
+
+    #celebration.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .balloon {
+      position: absolute;
+      bottom: -220px;
+      left: var(--left);
+      width: var(--size);
+      height: calc(var(--size) * 1.18);
+      border-radius: 50% 50% 50% 50% / 46% 46% 54% 54%;
+      background:
+        radial-gradient(circle at 32% 26%, rgba(255,255,255,.62), rgba(255,255,255,0) 44%),
+        linear-gradient(155deg, var(--c1), var(--c2));
+      box-shadow: inset -6px -10px 20px rgba(0,0,0,.28);
+      opacity: 0;
+      z-index: 2;
+      animation: float-up var(--duration) cubic-bezier(.34,.05,.62,.98) var(--delay) both;
+      will-change: transform, opacity;
+    }
+
+    .balloon::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: -6px;
+      transform: translateX(-50%);
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 9px solid var(--c2);
+    }
+
+    .balloon-string {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      width: 1px;
+      height: 56px;
+      transform: translateX(-50%);
+      background: linear-gradient(rgba(255,235,228,.55), rgba(255,235,228,0));
+    }
+
+    @keyframes float-up {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, 0, 0) rotate(var(--rot)) scale(.82);
+      }
+      12% { opacity: 1; }
+      88% { opacity: 1; }
+      100% {
+        opacity: 0;
+        transform: translate3d(var(--drift), calc(-1 * var(--travel)), 0)
+                   rotate(calc(var(--rot) * -1.6)) scale(1.02);
+      }
+    }
+
+    .age {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      z-index: 1;
+      margin: 0;
+      font-size: clamp(140px, 32vw, 320px);
+      line-height: .78;
+      letter-spacing: -.06em;
+      font-weight: 400;
+      color: transparent;
+      background: linear-gradient(
+        180deg,
+        rgba(255,250,247,.96),
+        rgba(217,170,160,.72) 58%,
+        rgba(168,116,106,.16)
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0;
+      transform: translate(-50%, 100%);
+      animation: age-rise var(--age-duration) cubic-bezier(.28,.06,.55,.98) var(--age-delay) both;
+      will-change: transform, opacity;
+    }
+
+    @keyframes age-rise {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, 100%) scale(.82);
+      }
+      14% { opacity: 1; }
+      62% {
+        opacity: 1;
+        transform: translate(-50%, -46svh) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, calc(-1 * var(--travel) - 60px)) scale(1.06);
+      }
+    }
+
     /* ---------- Main screen ---------- */
 
     #main {
       position: absolute;
       inset: 0;
+      z-index: 5;
       min-height: 100svh;
       opacity: 0;
       visibility: hidden;
@@ -197,6 +309,14 @@
       display: grid;
       align-content: center;
       gap: 34px;
+      opacity: 0;
+      transform: translateY(34px);
+      transition: opacity 1.1s ease, transform 1.3s cubic-bezier(.22,.8,.2,1);
+    }
+
+    #main.visible .main-inner {
+      opacity: 1;
+      transform: none;
     }
 
     .eyebrow {
@@ -336,7 +456,7 @@
       border: 1px solid rgba(225,190,162,.20);
       border-radius: 50%;
       background: rgba(38,32,35,.88);
-      color: var(--amber);
+      color: #d6a17e;
       cursor: pointer;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
@@ -438,8 +558,8 @@
 <body>
   <!--
     Keep these files in the same folder as this index.html:
-      music.mp3
-      animation.gif
+      piano.mp3
+      22nd.jpg
   -->
 
   <audio id="backgroundMusic" src="piano.mp3" loop preload="auto"></audio>
@@ -462,6 +582,11 @@
     </div>
   </section>
 
+  <!-- Balloons + "22" rise through here, then clear the way for the letter -->
+  <section id="celebration" aria-hidden="true">
+    <div id="celebrationStage" class="celebration-stage"></div>
+  </section>
+
   <main id="main" aria-hidden="true">
     <div class="main-inner">
       <header>
@@ -472,15 +597,14 @@
       <section class="content-grid">
         <article class="letter">
           <p>
-            "Dear Youssef, Happy birthday.           
+            "Dear Youssef, Happy birthday.
           </p>
 
           <p>
-           I wish you all the happiness the world has to offer. 
-           May your life be filled with laughter, health, and happiness. 
+           I wish you all the happiness the world has to offer.
+           May your life be filled with laughter, health, and happiness.
            My life has become infinitely better since you've been a part of it.
            And wherever this year takes us, I hope we continue to make memories, love, laugh, and watch our dreams come true."
-
           </p>
 
           <p class="signature">
@@ -518,8 +642,14 @@
       const envelopeButton = document.getElementById("envelopeButton");
       const audio = document.getElementById("backgroundMusic");
       const musicToggle = document.getElementById("musicToggle");
+      const celebration = document.getElementById("celebration");
+      const stage = document.getElementById("celebrationStage");
+
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       let opened = false;
+
+      /* ---------- music button ---------- */
 
       function updateMusicButton() {
         const playing = !audio.paused;
@@ -527,6 +657,93 @@
         musicToggle.setAttribute("aria-pressed", String(playing));
         musicToggle.setAttribute("aria-label", playing ? "Pause music" : "Play music");
       }
+
+      /* ---------- celebration ---------- */
+
+      const BALLOON_COLORS = [
+        ["#e8c4b8", "#c2887a"],
+        ["#f0d8c4", "#c99a72"],
+        ["#dfb2a6", "#a8705f"],
+        ["#f2e2d8", "#c9a999"],
+        ["#d9aaa0", "#9d6a60"],
+        ["#e6cdb4", "#b98f63"],
+        ["#e3c0bb", "#b07f78"]
+      ];
+
+      function buildCelebration() {
+        stage.innerHTML = "";
+
+        // How far each element travels before leaving the top of the screen.
+        const travel = window.innerHeight + 520;
+        stage.style.setProperty("--travel", travel + "px");
+
+        const count = window.innerWidth < 640 ? 11 : 16;
+
+        for (let i = 0; i < count; i++) {
+          const balloon = document.createElement("div");
+          balloon.className = "balloon";
+
+          const size = 38 + Math.random() * 56;
+          const left = 3 + Math.random() * 90;
+          const delay = Math.random() * (reduceMotion ? 0 : 0.85);
+          const duration = 3.1 + Math.random() * 1.6;
+          const drift = (Math.random() * 2 - 1) * 70;
+          const rot = (Math.random() * 2 - 1) * 14;
+          const [c1, c2] = BALLOON_COLORS[i % BALLOON_COLORS.length];
+
+          balloon.style.cssText =
+            `--left:${left}%;` +
+            `--size:${size}px;` +
+            `--delay:${delay}s;` +
+            `--duration:${duration}s;` +
+            `--drift:${drift}px;` +
+            `--rot:${rot}deg;` +
+            `--c1:${c1};` +
+            `--c2:${c2};`;
+
+          balloon.innerHTML = '<span class="balloon-string"></span>';
+          stage.appendChild(balloon);
+        }
+
+        // The big "22"
+        const age = document.createElement("div");
+        age.className = "age";
+        age.textContent = "22";
+        age.style.setProperty("--age-duration", (reduceMotion ? 0.4 : 3.6) + "s");
+        age.style.setProperty("--age-delay", (reduceMotion ? 0 : 0.05) + "s");
+        stage.appendChild(age);
+      }
+
+      function startCelebration() {
+        buildCelebration();
+        celebration.classList.add("active");
+        celebration.setAttribute("aria-hidden", "false");
+
+        musicToggle.hidden = false;
+        updateMusicButton();
+
+        const revealMainAt = reduceMotion ? 250 : 1750;
+        const fadeOutAt = reduceMotion ? 600 : 3300;
+        const cleanupAt = reduceMotion ? 1100 : 4400;
+
+        // While the balloons clear the top, the letter takes their place.
+        window.setTimeout(() => {
+          main.classList.add("visible");
+          main.setAttribute("aria-hidden", "false");
+        }, revealMainAt);
+
+        window.setTimeout(() => {
+          celebration.classList.remove("active");
+          celebration.setAttribute("aria-hidden", "true");
+        }, fadeOutAt);
+
+        window.setTimeout(() => {
+          stage.innerHTML = "";
+          celebration.style.display = "none";
+        }, cleanupAt);
+      }
+
+      /* ---------- envelope ---------- */
 
       function openEnvelope() {
         if (opened) return;
@@ -539,13 +756,10 @@
 
         envelopeButton.classList.add("opening");
 
-        // Let the flap animation breathe before revealing the letter.
+        // Let the flap animation breathe before the balloons take over.
         window.setTimeout(() => {
           landing.classList.add("hidden");
-          main.classList.add("visible");
-          main.setAttribute("aria-hidden", "false");
-          musicToggle.hidden = false;
-          updateMusicButton();
+          startCelebration();
         }, 650);
       }
 
