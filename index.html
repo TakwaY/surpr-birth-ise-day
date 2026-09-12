@@ -420,23 +420,11 @@
       height: 100%;
       object-fit: cover;
       opacity: 0;
-      transition: opacity .5s ease;
+      transition: opacity 0.2s ease;
     }
 
-    .media-placeholder.has-image img {
+    .media-placeholder img.active {
       opacity: 1;
-    }
-
-    .placeholder-copy {
-      position: relative;
-      z-index: 2;
-      text-align: center;
-      padding: 24px;
-      color: #8b949e;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 11px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
     }
 
     @keyframes pulse-ring {
@@ -560,6 +548,8 @@
     Keep these files in the same folder as this index.html:
       piano.mp3
       22nd.jpg
+      photo2.jpg
+      photo3.jpg
   -->
 
   <audio id="backgroundMusic" src="piano.mp3" loop preload="auto"></audio>
@@ -614,11 +604,9 @@
         </article>
 
         <div id="mediaPlaceholder" class="media-placeholder">
-          <img src="22nd.jpg" alt="Birthday animation" onload="document.getElementById('mediaPlaceholder').classList.add('has-image')" />
-          <div class="placeholder-copy">
-            <br />
-            <span style="opacity:.55;"></span>
-          </div>
+          <img src="image1.jpg" class="active" alt="Birthday photo 1" />
+          <img src="image2.jpg" alt="Birthday photo 2" />
+          <img src="image3.jpg" alt="Birthday photo 3" />
         </div>
       </section>
     </div>
@@ -648,6 +636,7 @@
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       let opened = false;
+      let carouselInterval = null;
 
       /* ---------- music button ---------- */
 
@@ -656,6 +645,21 @@
         musicToggle.classList.toggle("paused", !playing);
         musicToggle.setAttribute("aria-pressed", String(playing));
         musicToggle.setAttribute("aria-label", playing ? "Pause music" : "Play music");
+      }
+
+      /* ---------- carousel gallery ---------- */
+
+      function startCarousel() {
+        const images = document.querySelectorAll("#mediaPlaceholder img");
+        if (images.length === 0) return;
+        
+        let currentIndex = 0;
+        
+        carouselInterval = setInterval(() => {
+          images[currentIndex].classList.remove("active");
+          currentIndex = (currentIndex + 1) % images.length;
+          images[currentIndex].classList.add("active");
+        }, 1000);
       }
 
       /* ---------- celebration ---------- */
@@ -730,6 +734,7 @@
         window.setTimeout(() => {
           main.classList.add("visible");
           main.setAttribute("aria-hidden", "false");
+          startCarousel();
         }, revealMainAt);
 
         window.setTimeout(() => {
