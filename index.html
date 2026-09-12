@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#171210" />
+  <meta name="theme-color" content="#0f1115" />
   <title>A Little Birthday Surprise</title>
 
   <style>
     :root {
-      --bg: #121112;
-      --charcoal: #1b191b;
-      --charcoal-2: #252225;
-      --silver: #e8d9d2;
-      --white: #fffaf7;
-      --muted: #b6a9a5;
-      --accent: #d9aaa0;
-      --line: rgba(255,235,228,.17);
+      --bg: #0f1115;
+      --charcoal: #161b22;
+      --charcoal-2: #21262d;
+      --silver: #d1d5db;
+      --white: #f0f6fc;
+      --muted: #8b949e;
+      --accent: #58a6ff;
+      --line: rgba(88,166,255,.17);
     }
 
     * {
@@ -33,8 +33,8 @@
       min-height: 100svh;
       overflow-x: hidden;
       background:
-        radial-gradient(circle at 50% 30%, rgba(217,170,160,.11), transparent 34%),
-        radial-gradient(circle at 80% 85%, rgba(214,157,118,.075), transparent 28%),
+        radial-gradient(circle at 50% 30%, rgba(88,166,255,.12), transparent 34%),
+        radial-gradient(circle at 80% 85%, rgba(31,111,235,.08), transparent 28%),
         var(--bg);
       color: var(--white);
       font-family: Georgia, "Times New Roman", serif;
@@ -82,18 +82,18 @@
       background: transparent;
       cursor: pointer;
       perspective: 900px;
-      filter: drop-shadow(0 22px 32px rgba(0,0,0,.55));
+      filter: drop-shadow(0 22px 32px rgba(0,0,0,.6));
     }
 
     .envelope {
       position: absolute;
       inset: 0;
       border-radius: 5px;
-      background: linear-gradient(145deg, #302a2d, #171517);
-      border: 1px solid rgba(225,190,162,.18);
+      background: linear-gradient(145deg, #1f242c, #0d1117);
+      border: 1px solid rgba(88,166,255,.22);
       box-shadow:
-        inset 0 0 0 1px rgba(0,0,0,.4),
-        0 0 0 1px rgba(225,190,162,.035);
+        inset 0 0 0 1px rgba(0,0,0,.5),
+        0 0 0 1px rgba(88,166,255,.05);
       transform-style: preserve-3d;
     }
 
@@ -102,8 +102,8 @@
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(34deg, transparent 49.5%, rgba(225,190,162,.13) 50%, transparent 50.6%),
-        linear-gradient(146deg, transparent 49.5%, rgba(225,190,162,.10) 50%, transparent 50.6%);
+        linear-gradient(34deg, transparent 49.5%, rgba(88,166,255,.12) 50%, transparent 50.6%),
+        linear-gradient(146deg, transparent 49.5%, rgba(88,166,255,.09) 50%, transparent 50.6%);
       border-radius: inherit;
       pointer-events: none;
     }
@@ -117,14 +117,14 @@
       height: 63%;
       transform-origin: top center;
       clip-path: polygon(0 0, 100% 0, 50% 100%);
-      background: linear-gradient(145deg, #40383b, #211e20);
-      border-top: 1px solid rgba(225,190,162,.20);
+      background: linear-gradient(145deg, #28313d, #141a22);
+      border-top: 1px solid rgba(88,166,255,.25);
       transition: transform .9s cubic-bezier(.2,.75,.2,1);
       backface-visibility: hidden;
     }
 
     .seal {
-      color: #d6a17e;
+      color: #79c0ff;
       position: absolute;
       z-index: 5;
       left: 50%;
@@ -135,9 +135,9 @@
       display: grid;
       place-items: center;
       border-radius: 50%;
-      background: #3b2922;
-      border: 1px solid rgba(255,255,255,.2);
-      box-shadow: 0 5px 18px rgba(0,0,0,.45);
+      background: #111b27;
+      border: 1px solid rgba(121,192,255,.3);
+      box-shadow: 0 5px 18px rgba(0,0,0,.5);
       font-size: 17px;
       transition: opacity .35s ease, transform .35s ease;
     }
@@ -147,13 +147,13 @@
     }
 
     .envelope-button.opening .seal {
-      color: #d6a17e;
+      color: #79c0ff;
       opacity: 0;
       transform: translate(-50%, -15%) scale(.7);
     }
 
     .tap-text {
-      color: #d2c0bb;
+      color: #8b949e;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 12px;
       letter-spacing: .28em;
@@ -192,9 +192,9 @@
       height: calc(var(--size) * 1.18);
       border-radius: 50% 50% 50% 50% / 46% 46% 54% 54%;
       background:
-        radial-gradient(circle at 32% 26%, rgba(255,255,255,.62), rgba(255,255,255,0) 44%),
+        radial-gradient(circle at 32% 26%, rgba(255,255,255,.65), rgba(255,255,255,0) 44%),
         linear-gradient(155deg, var(--c1), var(--c2));
-      box-shadow: inset -6px -10px 20px rgba(0,0,0,.28);
+      box-shadow: inset -6px -10px 20px rgba(0,0,0,.35);
       opacity: 0;
       z-index: 2;
       animation: float-up var(--duration) cubic-bezier(.34,.05,.62,.98) var(--delay) both;
@@ -219,7 +219,7 @@
       width: 1px;
       height: 56px;
       transform: translateX(-50%);
-      background: linear-gradient(rgba(255,235,228,.55), rgba(255,235,228,0));
+      background: linear-gradient(rgba(139,148,158,.55), rgba(139,148,158,0));
     }
 
     @keyframes float-up {
@@ -249,9 +249,9 @@
       color: transparent;
       background: linear-gradient(
         180deg,
-        rgba(255,250,247,.96),
-        rgba(217,170,160,.72) 58%,
-        rgba(168,116,106,.16)
+        rgba(240,246,252,.96),
+        rgba(88,166,255,.78) 58%,
+        rgba(31,111,235,.18)
       );
       -webkit-background-clip: text;
       background-clip: text;
@@ -321,7 +321,7 @@
 
     .eyebrow {
       margin: 0 0 12px;
-      color: #b9a5a0;
+      color: #8b949e;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 10px;
       letter-spacing: .34em;
@@ -353,9 +353,9 @@
       position: relative;
       padding: clamp(26px, 5vw, 42px);
       border: 1px solid var(--line);
-      background: linear-gradient(145deg, rgba(255,235,228,.075), rgba(225,190,162,.035));
+      background: linear-gradient(145deg, rgba(88,166,255,.07), rgba(31,111,235,.03));
       border-radius: 4px;
-      box-shadow: 0 25px 70px rgba(0,0,0,.25);
+      box-shadow: 0 25px 70px rgba(0,0,0,.3);
       overflow: hidden;
     }
 
@@ -364,7 +364,7 @@
       position: absolute;
       top: -15px;
       left: 16px;
-      color: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.05);
       font-size: 130px;
       line-height: 1;
       pointer-events: none;
@@ -373,7 +373,7 @@
     .letter p {
       position: relative;
       margin: 0 0 18px;
-      color: #e1d8d5;
+      color: #c9d1d9;
       font-size: clamp(16px, 2.5vw, 19px);
       line-height: 1.75;
     }
@@ -384,7 +384,7 @@
 
     .signature {
       margin-top: 26px !important;
-      color: #e0b99d !important;
+      color: #79c0ff !important;
       font-style: italic;
     }
 
@@ -397,9 +397,9 @@
       border: 1px solid var(--line);
       border-radius: 4px;
       background:
-        linear-gradient(rgba(255,235,228,.035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,235,228,.035) 1px, transparent 1px),
-        #191719;
+        linear-gradient(rgba(88,166,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(88,166,255,.03) 1px, transparent 1px),
+        #11161d;
       background-size: 22px 22px;
     }
 
@@ -408,7 +408,7 @@
       position: absolute;
       width: 160px;
       height: 160px;
-      border: 1px solid rgba(255,255,255,.08);
+      border: 1px solid rgba(88,166,255,.12);
       border-radius: 50%;
       animation: pulse-ring 4s ease-in-out infinite;
     }
@@ -432,7 +432,7 @@
       z-index: 2;
       text-align: center;
       padding: 24px;
-      color: #aa9995;
+      color: #8b949e;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 11px;
       letter-spacing: .18em;
@@ -453,14 +453,14 @@
       height: 48px;
       display: grid;
       place-items: center;
-      border: 1px solid rgba(225,190,162,.20);
+      border: 1px solid rgba(88,166,255,.25);
       border-radius: 50%;
-      background: rgba(38,32,35,.88);
-      color: #d6a17e;
+      background: rgba(22,27,34,.88);
+      color: #79c0ff;
       cursor: pointer;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      box-shadow: 0 10px 28px rgba(0,0,0,.35);
+      box-shadow: 0 10px 28px rgba(0,0,0,.4);
       transition: transform .2s ease, border-color .2s ease;
     }
 
@@ -469,7 +469,7 @@
     }
 
     .music-toggle:hover {
-      border-color: rgba(255,255,255,.32);
+      border-color: rgba(121,192,255,.5);
     }
 
     .music-icon {
@@ -661,13 +661,13 @@
       /* ---------- celebration ---------- */
 
       const BALLOON_COLORS = [
-        ["#e8c4b8", "#c2887a"],
-        ["#f0d8c4", "#c99a72"],
-        ["#dfb2a6", "#a8705f"],
-        ["#f2e2d8", "#c9a999"],
-        ["#d9aaa0", "#9d6a60"],
-        ["#e6cdb4", "#b98f63"],
-        ["#e3c0bb", "#b07f78"]
+        ["#79c0ff", "#1f6feb"],
+        ["#a5d6ff", "#388bfd"],
+        ["#58a6ff", "#0969da"],
+        ["#b6e3ff", "#218bff"],
+        ["#388bfd", "#1f6feb"],
+        ["#d2e3fc", "#2f6feb"],
+        ["#6cb6ff", "#0550ae"]
       ];
 
       function buildCelebration() {
